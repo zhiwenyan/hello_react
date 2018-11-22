@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件的生命周期</title>
+
+    <!--react.min.js - React 的核心库-->
+    <script src="https://cdn.staticfile.org/react/16.6.0/umd/react.development.js"></script>
+    <!---react-dom.min.js - 提供与 DOM 相关的功能-->
+    <script src="https://cdn.staticfile.org/react-dom/16.6.0/umd/react-dom.development.js"></script>
+    <!--babel.min.js - Babel 可以将 ES6 代码转为 ES5 代码，这样我们就能在目前不支持 ES6 浏览器上执行 React 代码。
+    Babel 内嵌了对 JSX 的支持。通过将 Babel 和 babel-sublime 包（package）一同使用可以让源码的语法渲染上升到一个全新的水平-->
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <script src="https://cdn.staticfile.org/prop-types/15.6.2/prop-types.js"></script>
+</head>
+<div id='example'></div>
+<body>
+<script type="text/babel">
+    /**
+     *  需求: 自定义组件
+     1. 让指定的文本做显示/隐藏的渐变动画
+     2. 切换持续时间为 2S
+     3. 点击按钮从界面中移除组件界面
+     */
+
+    /**
+     * 生命周期流程:
+     a. 第一次初始化渲染显示: ReactDOM.render()
+     * constructor(): 创建对象初始化 state
+     * componentWillMount() : 将要插入回调
+     * render() : 用于插入虚拟 DOM 回调
+     * componentDidMount() : 已经插入回调
+     b. 每次更新 state: this.setSate()
+     * componentWillUpdate() : 将要更新回调
+     * render() : 更新(重新渲染)
+     * componentDidUpdate() : 已经更新回调
+     c. 移除组件: ReactDOM.unmountComponentAtNode(containerDom)
+     * componentWillUnmount() : 组件将要被移除回调
+     */
+    class Life extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                opacity: 1
+
+            };
+            this.destroyComponent = this.destroyComponent.bind(this)
+        }
+
+        componentWillMount() {
+            //启动循环定时器
+            this.intervalId = setInterval(function () {
+                console.log('定时器执行');
+                let {opacity} = this.state;
+                opacity -= 0.1;
+                if (opacity <= 0) {
+                    opacity = 1;
+                }
+                this.setState({opacity});
+            }.bind(this), 200)
+        }
+
+        componentWillUnmount() {
+            //清理定时器
+            clearInterval(this.intervalId);
+        }
+
+        componentWillUpdate(nextProps, nextState) {
+
+        }
+
+        destroyComponent() {
+            ReactDOM.unmountComponentAtNode(document.getElementById('example'))
+        }
+
+        render() {
+            const {opacity} = this.state;
+            return (
+                <div>
+                    <h2 style={{opacity: opacity}}>{this.props.message}</h2>
+                    <button onClick={this.destroyComponent}>不活了</button>
+                </div>
+            )
+        };
+    }
+
+    ReactDOM.render(<Life message="React 太难了"/>, document.getElementById('example'))
+
+</script>
+</body>
+</html>
