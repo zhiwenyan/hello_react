@@ -56,6 +56,7 @@
         }
 
         addTodo(todo) {
+            // 不能这样做
             //this.state.todos.unshift(todo)
             const {todos} = this.state;
             todos.unshift(todo);
@@ -100,6 +101,7 @@
 
             return (
                 <div>
+                    <!--组件内的标签都可以定义 ref 属性来标识自己-->
                     <input type="text" ref={input => this.todoInput = input}/>
                     <button onClick={this.add}>Add #{this.props.count + 1}</button>
                 </div>
@@ -125,7 +127,7 @@
                 </div>
 
             );
-
+            //指定属性
             List.PropTypes = {
                 todos: PropTypes.array.isRequired
             };

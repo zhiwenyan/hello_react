@@ -30,6 +30,7 @@
       **/
     //1、定义组件
     function Person(props) {
+        console.log(props);
         return (
             <ul>
                 <li>姓名：{props.name}</li>
@@ -49,6 +50,7 @@
         name: PropTypes.string.isRequired,
         age: PropTypes.number
 
+
     };
     //2、渲染组件标签
     const p1 = {
@@ -66,7 +68,7 @@
     //                         sex={p1.sex}/>, document.getElementById('example1'));
 
 
-    ReactDOM.render(<Person {...p1}/>,document.getElementById('example1'));
+    ReactDOM.render(<Person {...p1}/>, document.getElementById('example1'));
 
     ReactDOM.render(<Person name={p2.name} age={"23"}
                             sex={p2.sex}/>, document.getElementById('example2'));
